@@ -85,3 +85,8 @@ map_url = f"https://www.google.com/maps/place/{response['latitude']},{response['
 st.markdown(f"[Open in Google Maps]({map_url})")
 
 # show the image of the map using openstreetmap
+
+map_img = f"https://www.openstreetmap.org/export/embed.html?bbox={response['longitude']-0.01}%2C{response['latitude']-0.01}%2C{response['longitude']+0.01}%2C{response['latitude']+0.01}&amp;layer=mapnik&amp;marker={response['latitude']}%2C{response['longitude']}"
+
+st.markdown(f'<iframe width="100%" height="450" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="{map_img}"></iframe>', unsafe_allow_html=True)
+
