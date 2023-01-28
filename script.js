@@ -1,42 +1,46 @@
-$(document).ready(function () {
-  // client_response_json function here
-  function client_response_json() {
-    $.getJSON("https://ipapi.co/json/", function (response) {
-      if (response.error) {
-        $("#error-message").text("Error: " + response.reason);
-        $("#error-message").append("<br>" + response.message);
-        $("#error-message").show();
-        return;
-      }
-      $("#ip-address").text(response.ip);
-      $("#city").text(response.city);
-      $("#region").text(response.region);
-      $("#country-name").text(response.country_name);
-      $("#country-code").text(response.country);
-      $("#postal-code").text(response.postal);
-      $("#timezone").text(response.timezone);
-      $("#latitude").text(response.latitude);
-      $("#longitude").text(response.longitude);
-      $("#asn").text(response.asn);
-      $("#organization").text(response.org);
-      $("#continent-code").text(response.continent_code);
-      $("#currency").text(response.currency);
-      $("#country-population").text(response.country_population);
-      $("#country-area").text(response.country_area);
-      var flagImg = new Image();
-      flagImg.src =
-        "https://flagpedia.net/data/flags/normal/" +
-        response.country.toLowerCase() +
-        ".png";
-      $("#flag-img").append(flagImg);
-      var mapUrl =
-        "https://www.google.com/maps/place/" +
-        response.latitude +
-        "," +
-        response.longitude;
-      $("#map-link").attr("href", mapUrl);
-    });
-  }
-  // call the function on page load
-  client_response_json();
-});
+async function getIPLocation() {
+  const response = await fetch("https://ipapi.co/json/");
+  const data = await response.json();
+
+  // Display IP address
+  document.getElementById("ip").innerHTML = data.ip;
+
+  // Display location information
+  document.getElementById("city").innerHTML = data.city;
+  document.getElementById("region").innerHTML = data.region;
+  document.getElementById("country").innerHTML = data.country_name;
+  document.getElementById("country-code").innerHTML = data.country;
+  document.getElementById("postal").innerHTML = data.postal;
+  document.getElementById("timezone").innerHTML = data.timezone;
+  document.getElementById("latitude").innerHTML = data.latitude;
+  document.getElementById("longitude").innerHTML = data.longitude;
+  document.getElementById("asn").innerHTML = data.asn;
+  document.getElementById("org").innerHTML = data.org;
+
+  // Display additional information
+  document.getElementById("continent-code").innerHTML = data.continent_code;
+  document.getElementById("currency").innerHTML = data.currency;
+  document.getElementById("country-population").innerHTML =
+    data.country_population;
+  document.getElementById("country-area").innerHTML = data.country_area;
+
+  // Display country flag
+  const flagImg = document.getElementById("flag-img");
+  flagImg_url = 'https://countryflagsapi.com/png/" + data.country_code + ".png';
+
+  flagImg.src = flagImg_url;
+
+
+
+  // Display map location
+  const mapUrl = `https://www.google.com/maps/place/${data.latitude},${data.longitude}`;
+  document.getElementById("map-link").href = mapUrl;
+  const mapIframe = document.getElementById("map-iframe");
+  mapIframe.src = `https://www.openstreetmap.org/export/embed.html?bbox=${
+    data.longitude - 0.01
+  },${data.latitude - 0.01},${data.longitude + 0.01},${
+    data.latitude + 0.01
+  }&layer=mapnik&marker=${data.latitude},${data.longitude}`;
+}
+
+getIPLocation();
