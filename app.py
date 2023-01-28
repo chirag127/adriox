@@ -1,7 +1,4 @@
-from time import sleep
 import streamlit as st
-import requests
-from PIL import Image
 import flagpy as fp
 from streamlit_javascript import st_javascript
 
@@ -24,7 +21,8 @@ def client_response_json():
 
             return parsed_json
 
-        return result
+        else:
+            return None
 
     except:
         pass
@@ -32,7 +30,11 @@ def client_response_json():
 
 response = client_response_json()
 
-print(response)
+if response is None:
+    st.error("Error: No response from the server")
+    st.stop()
+
+
 
 try:
 
@@ -90,3 +92,38 @@ map_img = f"https://www.openstreetmap.org/export/embed.html?bbox={response['long
 
 st.markdown(f'<iframe width="100%" height="450" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="{map_img}"></iframe>', unsafe_allow_html=True)
 
+
+
+# st.subheader("Browser Information")
+
+# st.subheader("Browser CodeName")
+
+# st.markdown(f"<p>navigator.appCodeName</p>", unsafe_allow_html=True)
+
+# st.subheader("Browser Name")
+
+# st.markdown(f"<p>navigator.appName</p>", unsafe_allow_html=True)
+
+# st.subheader("Browser Version")
+
+# st.markdown(f"<p>navigator.appVersion</p>", unsafe_allow_html=True)
+
+# st.subheader("Cookies Enabled")
+
+# st.markdown(f"<p>navigator.cookieEnabled</p>", unsafe_allow_html=True)
+
+# st.subheader("Browser Language")
+
+# st.markdown(f"<p>navigator.language</p>", unsafe_allow_html=True)
+
+# st.subheader("Browser Online")
+
+# st.markdown(f"<p>navigator.onLine</p>", unsafe_allow_html=True)
+
+# st.subheader("Platform")
+
+# st.markdown(f"<p>navigator.platform</p>", unsafe_allow_html=True)
+
+# st.subheader("User-agent header")
+
+# st.markdown(f"<p>navigator.userAgent</p>", unsafe_allow_html=True)
