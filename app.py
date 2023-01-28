@@ -1,13 +1,40 @@
+from time import sleep
 import streamlit as st
 import requests
 from PIL import Image
+import flagpy as fp
+from streamlit_javascript import st_javascript
 
 st.set_page_config(page_title="My IP Address and Location", page_icon=":guardsman:", layout="wide")
+proxyUrl  = False
+def client_response_json():
 
-response = requests.get("https://ipapi.co/json/").json()
+    url = 'https://ipapi.co/json/'
+
+    script = (f'await fetch("{url}").then('
+                'function(response) {'
+                    'return response.json();'
+                '})')
+
+    try:
+        result = st_javascript(script)
+        if isinstance(result, dict):
+            parsed_json = result
+
+
+            return parsed_json
+
+        return result
+
+    except:
+        pass
+
+
+response = client_response_json()
+
+print(response)
 
 try:
-    # {'error': True, 'reason': 'RateLimited', 'message': 'Visit https://ipapi.co/ratelimited/ for details'}
 
     if response["error"]:
         st.error("Error: " + response["reason"])
@@ -15,8 +42,9 @@ try:
         st.stop()
 except KeyError:
     pass
+except TypeError:
+    pass
 
-print(response)
 
 # response = response.json()
 
@@ -35,19 +63,25 @@ st.markdown("Longitude: **" + str(response["longitude"]) + "**")
 st.markdown("ASN: **" + response["asn"] + "**")
 st.markdown("Organization: **" + response["org"] + "**")
 
-st.subheader("Map Location")
-map_url = f"https://maps.googleapis.com/maps/api/staticmap?center={response['latitude']},{response['longitude']}&size=800x800&zoom=14"
-map_img = Image.open(requests.get(map_url, stream=True).raw)
-st.image(map_img, use_column_width=True)
-
-st.subheader("Country Flag")
-flag_url = f"https://www.countryflags.io/{response['country_code']}/flat/64.png"
-flag_img = Image.open(requests.get(flag_url, stream=True).raw)
-st.image(flag_img, use_column_width=False)
-
 st.subheader("Additional information")
 
 st.markdown("Continent Code: **" + response["continent_code"] + "**")
 st.markdown("Currency: **" + response["currency"] + "**")
 st.markdown("Country Population: **" + str(response["country_population"]) + "**")
 st.markdown("Country Area: **" + str(response["country_area"]) + "**")
+
+
+
+st.subheader("Country Flag")
+img = fp.get_flag_img(response["country_name"])
+st.image(img, use_column_width=False)
+
+
+
+st.subheader("Map Location")
+map_url = f"https://www.google.com/maps/place/{response['latitude']},{response['longitude']}"
+
+# make a link to go to the map
+st.markdown(f"[Open in Google Maps]({map_url})")
+
+# show the image of the map using openstreetmap
