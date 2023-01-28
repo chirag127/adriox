@@ -26,9 +26,25 @@ async function getIPLocation() {
 
   // Display country flag
   const flagImg = document.getElementById("flag-img");
-  flagImg_url = 'https://countryflagsapi.com/png/" + data.country_code + ".png';
+  {
+    /* <img
+  src="https://flagcdn.com/144x108/za.png"
+  width="144"
+  height="108"
+  alt="South Africa"> */
+  }
+  i = "https://flagcdn.com/192x144/" + data.country_code.toLowerCase() + ".png";
 
-  flagImg.src = flagImg_url;
+  flagImg.src = i;
+  // flagImg.width = "144";
+  // flagImg.height = "108";
+  flagImg.alt = data.country_name;
+
+  // give height and width to the   <div class="flag-section">
+
+  const flagSection = document.getElementsByClassName("flag-section")[0];
+  flagSection.style.height = "144px";
+  flagSection.style.width = "192px";
 
 
 
