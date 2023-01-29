@@ -30,11 +30,6 @@ def client_response_json():
 
 response = client_response_json()
 
-if response is None:
-    st.error("Error: No response from the server")
-    st.stop()
-
-
 
 try:
 
